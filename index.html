@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Special Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: monospace;
+            background-color: bisque;
+        }
+
+        .mainbox {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .line, .typewriter-line {
+            border-right: 2px solid black;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            display: inline-block;
+            padding: 1px;
+            font-size: 28px;
+            line-height: 1.4;
+        }
+
+        .typewriter-line {
+            font-family: 'Roboto Mono', monospace;
+            border-right: 3px solid black;
+            font-size: 24px;
+            visibility: hidden;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 12px 24px;
+            font-size: 20px;
+            background-color: #ff8c00;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+
+        button.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        button:hover {
+            background-color: #a3600e;
+            transition: 1s;
+        }
+
+        video {
+            width: 95%;
+            max-height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        #textContainer {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .line, .typewriter-line {
+                font-size: 20px;
+            }
+
+            button {
+                font-size: 18px;
+                padding: 10px 20px;
+            }
+
+            video {
+                max-height: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mainbox" id="page1">
+        <div class="line">"Hello, birthday girl!"</div>
+        <div class="line">"Today is all about celebrating you —"</div>
+        <div class="line">"your smile, your kindness, and the amazing"</div>
+        <div class="line">"Wishing you a day filled with love, laughter,"</div>
+        <div class="line">"and all your favorite things."</div>
+        <div class="line" id="lastLine">"happy birthday!"</div>
+        <button id="continueBtn">Click to continue</button>
+    </div>
+
+    <div class="mainbox" id="page2" style="display: none;">
+        <video id="myVideo" controls playsinline>
+            <source src="video2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div id="textContainer">
+            <div class="typewriter-line">Koi lafz hi nahi is duniya mai</div>
+            <div class="typewriter-line">Jo bayan kar sake tu kya hai mere liye</div>
+            <div class="typewriter-line">Maine rab se manga tha ek sitara,</div>
+            <div class="typewriter-line">Badle mai de diya usne poora aasman tera roop banake.</div>
+            <div class="typewriter-line">Tu meri har dua ki inteha hai,</div>
+            <div class="typewriter-line">Tujhse aage kuch maanga hi nahi</div>
+            <div class="typewriter-line">kyunki tu hi toh khuda ka sabse badi"haan"hai mere liye</div>
+            <div class="typewriter-line">Tere naam se chalti hai meri dhadkane</div>
+            <div class="typewriter-line">or tere gusse se ruk jaata hai waqt bhi</div>
+            <div class="typewriter-line">Main tere aage jhukta nahi hun balki</div>
+            <div class="typewriter-line">Main tujh mia sama jaata hoon</div>
+        </div>
+    </div> 
+
+    <script>
+        const lines = document.querySelectorAll('#page1 .line');
+        const button = document.getElementById('continueBtn');
+
+        lines.forEach((line, index) => {
+            line.style.animation = `typing 2s steps(50, end) forwards, blink 0.7s step-end infinite`;
+            line.style.animationDelay = `${index * 2.2}s`;
+        });
+
+        const lastLine = document.getElementById('lastLine');
+        lastLine.addEventListener('animationend', () => {
+            button.classList.add('show');
+        });
+
+        button.addEventListener('click', () => {
+            document.getElementById('page1').style.display = 'none';
+            const page2 = document.getElementById('page2');
+            page2.style.display = 'flex';
+
+            const video = document.getElementById('myVideo');
+            video.muted = false;
+            video.play();
+
+            video.addEventListener('ended', () => {
+                video.style.display = 'none';  // Video hat jayegi
+                page2.style.justifyContent = 'center';  // Text ko center karega
+                document.getElementById('textContainer').style.display = 'flex';  // Text show karega
+                typeLine(0);
+            });
+        });
+
+        function typeLine(index) {
+            const lines = document.querySelectorAll('.typewriter-line');
+            if (index >= lines.length) return;
+
+            const line = lines[index];
+            line.style.visibility = 'visible';
+            line.style.animation = `typing 2s steps(${line.textContent.length}, end) forwards, blink 0.7s infinite`;
+
+            setTimeout(() => {
+                line.style.borderRight = 'none';
+                typeLine(index + 1);
+            }, 4000);
+        }
+    </script>
+
+</body>
+
+</html>
